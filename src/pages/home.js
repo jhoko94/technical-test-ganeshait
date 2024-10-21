@@ -120,6 +120,7 @@ const Home = () => {
               center={mapCenter}
               zoom={mapZoom}
               setLocbyParam={params}
+              source={source}
             />
           )
         )}
