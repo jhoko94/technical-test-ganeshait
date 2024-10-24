@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactDOMServer from "react-dom/server";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Polyline } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { MapMarkerAccountIcon, MapMarkerIcon2 } from "./iconSVG/pin";
 import { Typography } from "@material-tailwind/react";
-import RoutingMachine from "./RoutingMachine";
 
-const LeafletMap = ({ vehicles, center, zoom, setLocbyParam, source }) => {
+const LeafletMap = ({ vehicles, center, zoom, setLocbyParam }) => {
   const mapRef = useRef(null);
   const [mapKey, setMapKey] = useState(Date.now());
 
@@ -32,8 +31,7 @@ const LeafletMap = ({ vehicles, center, zoom, setLocbyParam, source }) => {
     setMapKey(Date.now());
   };
 
-  let isLand = source === "darat";
-  const showLandRoute = isLand && vehicles.length === 1;
+  const polylineOptions = { color: 'blue' };
 
   return (
     <MapContainer
@@ -98,10 +96,9 @@ const LeafletMap = ({ vehicles, center, zoom, setLocbyParam, source }) => {
               </div>
             </Popup>
           </Marker>
-          {showLandRoute && <RoutingMachine
-            instance={mapRef}
-            position={[setLocbyParam.latitude, setLocbyParam.longitude]}
-            vehicle={[vehicle.LATITUDE, vehicle.LONGITUDE]}
+          {vehicles.length === 1 && <Polyline
+            pathOptions={polylineOptions}
+            positions={[[setLocbyParam.latitude, setLocbyParam.longitude], [vehicle.LATITUDE, vehicle.LONGITUDE]]}
           />}
         </>
       ))}

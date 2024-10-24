@@ -37,6 +37,14 @@ function SidebarComp(props) {
     });
   };
 
+  const disctanceShow = (source, vehicle) => {
+    if (source === "darat") {
+      return vehicle.DISTANCE_DARAT || vehicle.DISTANCE_DARAT_GRAPHOOPER || vehicle.DISTANCE_DARAT_OSRM;
+    } else {
+      return vehicle.DISTANCE_UDARA;
+    }
+  };
+
   return (
     <Card className="h-[calc(100vh-5rem)] w-full w-[25rem] shadow-xl shadow-blue-gray-900/5">
       <LocationForm onSubmit={handleLocationSubmit} />
@@ -131,13 +139,7 @@ function SidebarComp(props) {
               </ListItemPrefix>
               <ListItemPrefix>
                 <Chip
-                  value={
-                    props.source
-                      ? props.source === "darat"
-                        ? vehicle.DISTANCE_DARAT
-                        : vehicle.DISTANCE_UDARA
-                      : ""
-                  }
+                  value={disctanceShow(props.source, vehicle)}
                   variant="ghost"
                   size="sm"
                   className="rounded-full px-2 py-1 text-xs group-hover:bg-white/20 group-hover:text-white"

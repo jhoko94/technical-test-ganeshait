@@ -3,6 +3,7 @@ import SidebarComp from "../components/SideBar";
 import LeafletMap from "../components/LeafletMap";
 import { fetchNearestLocationsDaratUdara } from "../store/fromAgregator";
 import { ClipLoader } from "react-spinners";
+import RoutingMap from "../components/RoutingMap";
 
 const Home = () => {
   const [mapCenter, setMapCenter] = useState([]);
@@ -115,13 +116,23 @@ const Home = () => {
           </div>
         ) : (
           mapCenter.length > 0 && (
-            <LeafletMap
-              vehicles={selectedVehicle}
-              center={mapCenter}
-              zoom={mapZoom}
-              setLocbyParam={params}
-              source={source}
-            />
+            selectedVehicle.length === 1 && source === "darat"? (
+              <RoutingMap
+                vehicles={selectedVehicle}
+                center={mapCenter}
+                zoom={mapZoom}
+                setLocbyParam={params}
+                source={source}
+              />
+            ) : (
+              <LeafletMap
+                vehicles={selectedVehicle}
+                center={mapCenter}
+                zoom={mapZoom}
+                setLocbyParam={params}
+                source={source}
+              />
+            )
           )
         )}
       </div>
