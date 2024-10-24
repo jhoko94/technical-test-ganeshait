@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactDOMServer from "react-dom/server";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Polyline } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { MapMarkerAccountIcon, MapMarkerIcon2 } from "./iconSVG/pin";
 import { Typography } from "@material-tailwind/react";
@@ -31,6 +31,8 @@ const LeafletMap = ({ vehicles, center, zoom, setLocbyParam }) => {
     setMapKey(Date.now());
   };
 
+  const polylineOptions = { color: 'blue' };
+
   return (
     <MapContainer
       key={mapKey}
@@ -52,47 +54,53 @@ const LeafletMap = ({ vehicles, center, zoom, setLocbyParam }) => {
         })}
       ></Marker>
       {vehicles.map((vehicle) => (
-        <Marker
-          key={vehicle.DEVICE_ID}
-          position={[vehicle.LATITUDE, vehicle.LONGITUDE]}
-          // eslint-disable-next-line no-undef
-          icon={L.divIcon({
-            html: ReactDOMServer.renderToString(<MapMarkerAccountIcon />),
-            iconSize: [32, 32],
-          })}
-        >
-          <Popup>
-            <div>
-              <Typography variant="h5" className="mb-2">
-                {vehicle.DEVICE_NAME}
-              </Typography>
-              <table className="w-full min-w-max table-auto text-left">
-                <tbody>
-                  <tr>
-                    <td>Device Id</td>
-                    <td>: {vehicle.DEVICE_ID}</td>
-                  </tr>
-                  <tr>
-                    <td>Device Location</td>
-                    <td>: {vehicle.DEVICE_LOCATION}</td>
-                  </tr>
-                  <tr>
-                    <td>Device Type</td>
-                    <td>: {vehicle.DEVICE_TYPE}</td>
-                  </tr>
-                  <tr>
-                    <td>Address</td>
-                    <td>: {vehicle.DEVICE_ADDRESS}</td>
-                  </tr>
-                  <tr>
-                    <td>Land Distance</td>
-                    <td>: {vehicle.DISTANCE_DARAT}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </Popup>
-        </Marker>
+        <>
+          <Marker
+            key={vehicle.DEVICE_ID}
+            position={[vehicle.LATITUDE, vehicle.LONGITUDE]}
+            // eslint-disable-next-line no-undef
+            icon={L.divIcon({
+              html: ReactDOMServer.renderToString(<MapMarkerAccountIcon />),
+              iconSize: [32, 32],
+            })}
+          >
+            <Popup>
+              <div>
+                <Typography variant="h5" className="mb-2">
+                  {vehicle.DEVICE_NAME}
+                </Typography>
+                <table className="w-full min-w-max table-auto text-left">
+                  <tbody>
+                    <tr>
+                      <td>Device Id</td>
+                      <td>: {vehicle.DEVICE_ID}</td>
+                    </tr>
+                    <tr>
+                      <td>Device Location</td>
+                      <td>: {vehicle.DEVICE_LOCATION}</td>
+                    </tr>
+                    <tr>
+                      <td>Device Type</td>
+                      <td>: {vehicle.DEVICE_TYPE}</td>
+                    </tr>
+                    <tr>
+                      <td>Address</td>
+                      <td>: {vehicle.DEVICE_ADDRESS}</td>
+                    </tr>
+                    <tr>
+                      <td>Land Distance</td>
+                      <td>: {vehicle.DISTANCE_DARAT}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </Popup>
+          </Marker>
+          {vehicles.length === 1 && <Polyline
+            pathOptions={polylineOptions}
+            positions={[[setLocbyParam.latitude, setLocbyParam.longitude], [vehicle.LATITUDE, vehicle.LONGITUDE]]}
+          />}
+        </>
       ))}
     </MapContainer>
   );
